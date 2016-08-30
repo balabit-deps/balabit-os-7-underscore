@@ -1,0 +1,43 @@
+#!/usr/bin/make -f
+# -*- mode: makefile; coding: utf-8 -*-
+# Copyright © 2010-2014, 2016 Jonas Smedegaard <dr@jones.dk>
+# Description: Main Debian packaging script for Underscore
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3, or (at your option)
+# any later version.
+#
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+include /usr/share/cdbs/1/rules/utils.mk
+include /usr/share/cdbs/1/rules/debhelper.mk
+
+lib = $(DEB_SOURCE_PACKAGE)
+pkg-js = libjs-$(lib)
+pkg-node = node-$(lib)
+js-reg = $(lib).js
+js-min = $(lib).min.js
+js-nodestem = $(lib)
+js-destdir = /usr/share/javascript/$(lib)
+node-destdir = /usr/lib/nodejs/$(lib)
+
+CDBS_BUILD_DEPENDS +=, uglifyjs, node-source-map
+
+build/$(pkg-js):: $(js-min)
+$(js-min): %.min.js: %.js
+	uglifyjs --source-map $*.min.map -o $@ $<
+clean::
+	rm -f $(js-min) $(js-min:js=map)
+
+DEB_INSTALL_DOCS_ALL += README.md index.html
+
+DEB_DH_INSTALL_ARGS_$(pkg-js) = $(js-reg) $(js-min) $(js-min:js=map) $(js-destdir)
+DEB_DH_INSTALL_ARGS_$(pkg-node) = package.json $(node-destdir)
+DEB_DH_LINK_$(pkg-node) = $(js-destdir)/$(js-nodestem).js $(node-destdir)/index.js

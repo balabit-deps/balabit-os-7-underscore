@@ -1,0 +1,5 @@
+# run "uscan --report" to check or "gpb import-orig --uscan" to update
+version=4
+opts="filenamemangle=s%(?:.*?)?v?(\d[\d.]*)\.tar\.gz%underscore-$1.tar.gz%,dversionmangle=s/~dfsg\d*$//,repacksuffix=~dfsg" \
+ https://github.com/documentcloud/underscore/tags \
+ (?:.*?/)?v?(\d[\d.]*)\.tar\.gz debian
