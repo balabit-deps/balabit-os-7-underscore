@@ -1,3 +1,11 @@
+underscore (1.8.3~dfsg-1ubuntu0.1) bionic-security; urgency=medium
+
+  * SECURITY UPDATE: Arbitrary code execution
+    - debian/patches/CVE-2021-23358.patch: fix an arbitrary code exec in underscore.js.
+    - CVE-2021-23358
+
+ -- Leonidas Da Silva Barbosa <leo.barbosa@canonical.com>  Wed, 07 Apr 2021 08:56:00 -0300
+
 underscore (1.8.3~dfsg-1) unstable; urgency=medium
 
   [ upstream ]
